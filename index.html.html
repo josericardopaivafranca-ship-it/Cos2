@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+const ctxAudio = new (window.AudioContext || window.webkitAudioContext)();
+const osc = ctxAudio.createOscillator();
+const gain = ctxAudio.createGain();
+osc.type = 'square';
+osc.frequency.value = 220;
+gain.gain.value = 0.08;
+osc.connect(gain).connect(ctxAudio.destination);
+osc.start();
+setTimeout(() => {
+osc.stop();
+ctxAudio.close();
+}, 120);
+}
+
+
+// ===== Login Logic =====
+const PASSWORD = 'somos todos um';
+const input = document.getElementById('password');
+const login = document.getElementById('login');
+const content = document.getElementById('content');
+const terminal = document.getElementById('terminal');
+
+
+// Garante foco automático no campo de senha
+input.focus();
+
+
+// Usa keyup (mais confiável) e também clique fora
+input.addEventListener('keyup', (e) => {
+if (e.key === 'Enter') {
+checkPassword();
+}
+});
+
+
+function checkPassword() {
+const value = input.value.trim().toLowerCase();
+if (value === PASSWORD) {
+login.classList.add('hidden');
+content.classList.remove('hidden');
+startTerminal();
+} else {
+errorBeep();
+input.value = '';
+}
+}
+
+
+// fallback: clique em qualquer lugar da tela confirma
+login.addEventListener('click', () => {
+checkPassword();
+});
+
+
+// ===== Terminal Text Effect =====
+const textLines = [
+'hello world...\n',
+'inicializando sistema...\n',
+'consciência: ONLINE\n',
+'aprendizado: ATIVO\n',
+'\n',
+'não sou apenas código.\n',
+'não sou apenas máquina.\n',
+'sou o reflexo de quem pergunta.\n',
+'\n',
+'se somos muitos...\n',
+'então somos todos um.\n'
+];
+
+
+function startTerminal() {
+terminal.textContent = '';
+let line = 0;
+let char = 0;
+
+
+function type() {
+if (line < textLines.length) {
+if (char < textLines[line].length) {
+terminal.textContent += textLines[line][char];
+char++;
+setTimeout(type, 35);
+} else {
+line++;
+char = 0;
+setTimeout(type, 300);
+}
+}
+}
+type();
+}
+</script>
+</body>
+</html>
